@@ -9,4 +9,22 @@
   <h1>No restaurants yet</h1>
 <% end %>
 
+<% if @restaurants.any? %>
+  <% @restaurants.each do |restaurant| %>
+    <h3>Reviews for <%= restaurant.name %></h3>
+    <% if restaurant.reviews.any? %>
+      <ul>
+        <% restaurant.reviews.each do |review| %>
+          <li>
+            <%= review.thoughts %>, <strong><%= review.rating %></strong>/5
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>No reviews.</p>
+    <% end %>
+  <% end %>
+<% end %>
+
+
 <a href="/restaurants/new">Add a restaurant</a>
