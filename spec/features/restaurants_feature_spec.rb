@@ -22,6 +22,9 @@ feature 'restaurants' do
   end
 
   context 'creating restaurants' do
+
+    before {create_user}
+
     scenario 'prompts user to fill out a form, then displays the new restaurant' do
       visit '/restaurants'
       click_link 'Add a restaurant'
@@ -45,6 +48,7 @@ feature 'restaurants' do
 
   context 'editing restaurants' do
     before {Restaurant.create name: 'Nandos'}
+    before {create_user}
 
     scenario 'let a user edit a restaurant' do
       visit '/restaurants'
@@ -58,9 +62,10 @@ feature 'restaurants' do
 
   context 'deleting restaurants' do
 
+    before {create_user}
     before {Restaurant.create name: 'KFC'}
 
-    scenario 'removes a restaurant when a user clicks a delte link' do
+    scenario 'removes a restaurant when a user clicks a delete link' do
       visit '/restaurants'
       click_link 'Delete KFC'
       expect(page).not_to have_content 'KFC'
@@ -69,6 +74,8 @@ feature 'restaurants' do
   end
 
   context 'an invalid restaurants' do
+
+    before {create_user}
 
     it 'does not let you submit a name that is too short' do
       visit '/restaurants'
@@ -80,8 +87,13 @@ feature 'restaurants' do
     end
   end
 
-
-
+def create_user
+  User.create email:'test@email.com', password:'password'
+  visit '/users/sign_in'
+  fill_in 'Email', with: 'test@email.com'
+  fill_in 'Password', with: 'password'
+  click_button 'Log in'
+end
 
 
 end
